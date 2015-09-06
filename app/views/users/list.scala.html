@@ -3,8 +3,9 @@
 
 @* main.scala.htmlを呼び出す *@
 @main("ユーザー一覧") {
+
     <div>
-        <a href="@routes.UserController.edit()">新規作成</a>
+        <a href="@routes.UserController.edit()" class="btn btn-success" role="button">新規作成</a>
     </div>
 
     <div class="col-xs-6">
@@ -13,25 +14,23 @@
                 <tr>
                     <th>ID</th>
                     <th>名前</th>
-                    <th></th>
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
-                @* ユーザーの一覧をループで出力 *@
+                @* ユーザの一覧をループで出力 *@
                 @users.map { user =>
                     <tr>
                         <td>@user.id</td>
-                        <td>@user.name</td>
-                        <td>
-                            <a href="@routes.UserController.edit(Some(user.id))" class="btn btn-info btn-xs">Edit</a>
-                            @helper.form(routes.UserController.remove(Some(user.id))) {
-                                <input type="submit" value="削除" class="btn btn-danger btn-xs"/>
-                            }
+                        <td><a href="@routes.UserController.edit(Some(user.id))">@user.name</a></td>
+                        <td>@helper.form(routes.UserController.remove(user.id)){
+                            <input type="submit" value="削除" class="btn btn-danger btn-xs"/>
+                        }
                         </td>
                     </tr>
                 }
             </tbody>
-      </table>
+        </table>
     </div>
 
 }
