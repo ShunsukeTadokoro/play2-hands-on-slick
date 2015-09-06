@@ -14,8 +14,8 @@
           '_label -> "会社", '_default -> "-- 会社名を選択してください --")
       </div>
       @* IDがある場合(更新の場合)のみhiddenを出力する *@
-      @userForm.value.map { value =>
-        <input type="hidden" name="id" value="@value"/>
+      @userForm("id").value.map { value =>
+        <input type="hidden" name="id" value="@value" />
       }
       <div>
         <input type="submit" value="送信" class="btn btn-success"/>

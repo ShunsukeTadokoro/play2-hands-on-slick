@@ -14,6 +14,7 @@
                 <tr>
                     <th>ID</th>
                     <th>名前</th>
+                    <th>所属</th>
                     <th>&nbsp;</th>
                 </tr>
             </thead>
@@ -23,6 +24,7 @@
                     <tr>
                         <td>@user.id</td>
                         <td><a href="@routes.UserController.edit(Some(user.id))">@user.name</a></td>
+                        <td>@user.companyId</td>
                         <td>@helper.form(routes.UserController.remove(user.id)){
                             <input type="submit" value="削除" class="btn btn-danger btn-xs"/>
                         }

@@ -58,18 +58,61 @@ class UserController @Inject()(val dbConfigProvider: DatabaseConfigProvider, val
   /**
    * 登録実行
    */
-  def create = TODO
+  def create = Action.async { implicit rs =>
+    // リクエストの内容をバインド
+    userForm.bindFromRequest.fold(
+      // エラーの場合
+      error => {
+        db.run(Companies.sortBy(t => t.id).result).map { companies =>
+          BadRequest(views.html.users.edit(error, companies))
+        }
+      },
+      // OKの場合
+      form => {
+        // ユーザーを登録
+        val user = UsersRow(0, form.name, form.companyId)
+        db.run(Users += user).map { _ =>
+          // 一覧画面にリダイレクト
+          Redirect(routes.UserController.list)
+        }
+      }
+    )
+  }
 
   /**
    * 更新実行
    */
-  def update = TODO
+  def update = Action.async { implicit rs =>
+    // リクエストの内容をバインド
+    userForm.bindFromRequest.fold(
+      // エラーの場合
+      error => {
+        db.run(Companies.sortBy(t => t.id).result).map { companies =>
+          BadRequest(views.html.users.edit(error, companies))
+        }
+      },
+      // OKの場合
+      form => {
+        // ユーザ情報を更新
+        val user = UsersRow(form.id.get, form.name, form.companyId)
+        db.run(Users.filter(t => t.id === user.id.bind).update(user)).map { _ =>
+          // 一覧画面にリダイレクト
+          Redirect(routes.UserController.list)
+        }
+      }
+    )
+  }
 
   /**
    * 削除実行
    */
-  def remove(id: Long) = TODO
-
+  def remove(id: Long) = Action.async { implicit rs =>
+    // ユーザー情報を削除
+    db.run(Users.filter(t => t.id === id.bind).delete).map { _ =>
+      // 一覧画面にリダイレクト
+      Redirect(routes.UserController.list)
+    }
+  }
 }
 
 object UserController {
